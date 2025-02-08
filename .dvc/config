@@ -1,0 +1,4 @@
+[core]
+    remote = voicedata
+['remote "voicedata"']
+    url = gdrive://1MpQ8HfkfClUOPGa0EzfM7ZUoB3hnfUVV
