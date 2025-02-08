@@ -1,4 +1,4 @@
-# This code will be used for the dataset build for modelo_predictor_edad_2.ipynb
+# This code will be used for the dataset build for modelo_predictor_edad_3.ipynb
 
 import librosa
 import numpy as np
