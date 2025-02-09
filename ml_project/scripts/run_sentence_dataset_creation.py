@@ -9,13 +9,13 @@ from ml_project.config.params import DataConfig
 from ml_project.pipelines.sentence_pipeline import run_data_pipeline
 from ml_project.logging.mlflow_logger import MLflowLogger
 
-def run_sentence_dataset_creation_pipeline():
+def run_dataset_creation_pipeline():
     """
     Run the dataset creation pipeline.
     """
     # Initialize MLflow logger
     logger = MLflowLogger(
-        experiment_name="sentence_dataset_creation",
+        experiment_name="dataset_creation",
         tracking_uri="file:./mlruns"  # Using local filesystem for MLflow tracking
     )
     
@@ -30,4 +30,4 @@ def run_sentence_dataset_creation_pipeline():
     dataset = run_data_pipeline(config, logger=logger)
 
 if __name__ == "__main__":
-    run_sentence_dataset_creation_pipeline()
+    run_dataset_creation_pipeline()
