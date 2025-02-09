@@ -1,13 +1,14 @@
 from pathlib import Path
 import mlflow
 import pandas as pd
-from src.interfaces import ExperimentLogger
+from ml_project.src.interfaces import ExperimentLogger
 from sklearn.model_selection import GridSearchCV
 
 class MLflowLogger(ExperimentLogger):
     def __init__(self, experiment_name: str, tracking_uri: str):
         mlflow.set_tracking_uri(tracking_uri)
         mlflow.set_experiment(experiment_name)
+        self.client = mlflow.tracking.MlflowClient()
         
     def log_training_metadata(self, model: GridSearchCV, cv_results: pd.DataFrame):
         with mlflow.start_run():
@@ -51,3 +52,29 @@ class MLflowLogger(ExperimentLogger):
             dataset.to_parquet(temp_path)
             mlflow.log_artifact(temp_path)
             temp_path.unlink()
+
+    def log_params(self, params):
+        """Log parameters to MLflow
+        
+        Args:
+            params (dict): Dictionary of parameters to log
+        """
+        for key, value in params.items():
+            mlflow.log_param(key, value)
+    
+    def log_metrics(self, metrics):
+        """Log metrics to MLflow
+        
+        Args:
+            metrics (dict): Dictionary of metrics to log
+        """
+        for key, value in metrics.items():
+            mlflow.log_metric(key, value)
+            
+    def log_artifact(self, local_path):
+        """Log an artifact (file) to MLflow
+        
+        Args:
+            local_path (str): Path to the file to log
+        """
+        mlflow.log_artifact(local_path)
