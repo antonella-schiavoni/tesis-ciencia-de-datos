@@ -2,7 +2,7 @@ from ml_project.components.preprocessing.audio_dataset_creator import AudioDatas
 from ml_project.logging.mlflow_logger import MLflowLogger
 from ml_project.config.params import DataConfig
 
-def run_data_pipeline(config: DataConfig, logger: MLflowLogger = None):
+def run_sentence_pipeline(config: DataConfig, logger: MLflowLogger = None):
     """Run the data pipeline to create the dataset
     
     Args:
