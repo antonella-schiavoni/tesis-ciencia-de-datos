@@ -1,47 +1,52 @@
+import mlflow
+import pandas as pd
 from ml_project.components.preprocessing.praat_feature_extractor import PraatFeatureExtractor
-from ml_project.components.preprocessing.librosa_feature_extractor import LibrosaFeatureExtractor
-from ml_project.logging.mlflow_logger import MLflowLogger
+from ml_project.components.preprocessing.sentence_dataset_creator import SentenceDatasetCreator
+
 from ml_project.config.params import SentenceConfig
+from typing import Optional
 
-def run_sentence_pipeline(config: SentenceConfig, logger: MLflowLogger = None, praat_extractor: PraatFeatureExtractor = None):
-    """Run the data pipeline to create the dataset
-    
-    Args:
-        config (DataConfig): Configuration for dataset creation
-        logger (MLflowLogger, optional): MLflow logger instance
-    
-    Returns:
-        pd.DataFrame: The created dataset
-    """
-    # Create dataset
-    dataset_creator = LibrosaFeatureExtractor(
-        participant_info_path=config.participant_info_path,
-        sample_rate=config.sample_rate
-    )
-    dataset = dataset_creator.prepare_data(config.sentences_path)
+from ml_project.logging.mlflow_logger import MLflowLogger
 
-    
-    praat_extractor.extract_features(config.sentences_path)
-    
-    # Log dataset if logger is provided
-    if logger:
-        logger.log_dataset(
-            dataset=dataset,
-            dataset_name="audio_features",
-            description="Dataset containing audio features extracted from voice recordings"
+class SentencePipeline:
+    def __init__(self, config: SentenceConfig, logger: Optional[MLflowLogger] = None):
+        self.config = config
+        self.logger = logger or MLflowLogger(
+            config.mlflow_tracking_uri,
+            config.mlflow_experiment
         )
-        
-        # Log configuration parameters
-        logger.log_params({
-            "sentences_path": str(config.sentences_path),
-            "participant_info_path": str(config.participant_info_path),
-            "output_path": str(config.output_path),
-            "num_samples": len(dataset),
-            "num_features": len(dataset.columns)
+        self.feature_extractor = PraatFeatureExtractor(
+            exclude_segments=config.exclude_segments,
+            features_template=config.features_template
+        )
+        self.dataset_creator = SentenceDatasetCreator(
+            feature_extractor=self.feature_extractor,
+            eval_path=config.eval_path,
+            participant_path=config.participant_path,
+            output_dir=config.output_dir
+        )
+
+    def run(self) -> pd.DataFrame:
+        with mlflow.start_run():
+            df = self.dataset_creator.create_dataset(self.config.base_dir)
+            
+            if self.logger:
+                self._log_metadata(df)
+                
+            self._save_dataset(df)
+            return df
+
+    def _log_metadata(self, df: pd.DataFrame):
+        self.logger.log_dataset(df, "vowel_features")
+        mlflow.log_params({
+            "exclude_segments": self.config.exclude_segments,
+            "input_dir": str(self.config.base_dir),
+            "output_dir": str(self.config.output_dir)
         })
-    
-    # Save dataset locally as well
-    config.output_path.parent.mkdir(parents=True, exist_ok=True)
-    dataset.to_csv(config.output_path, index=False)
-    
-    return dataset
+
+    def _save_dataset(self, df: pd.DataFrame):
+        self.config.output_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")
+        output_path = self.config.output_dir / f"vowel_features_{timestamp}.csv"
+        mlflow.log_param("output_path", str(output_path))
+        df.to_csv(output_path, index=False)

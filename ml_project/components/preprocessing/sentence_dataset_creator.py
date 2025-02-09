@@ -7,7 +7,7 @@ from typing import List, Dict
 from ml_project.src.interfaces import DatasetCreator, FeatureExtractor
 
 
-class VowelDatasetCreator(DatasetCreator):
+class SentenceDatasetCreator(DatasetCreator):
     def __init__(self, 
                  feature_extractor: FeatureExtractor,
                  eval_path: Path,
@@ -17,29 +17,27 @@ class VowelDatasetCreator(DatasetCreator):
         self.eval_path = eval_path
         self.participant_path = participant_path
         self.output_dir = output_dir
-        self.file_pattern = re.compile(r'^[FM]-\d+_VoiceVowel\.wav$')
+        self.file_pattern = re.compile(r'^[FM]-\d+_VoiceSentence2(Hour).wav')
 
     def create_dataset(self, base_dir: Path) -> pd.DataFrame:
-        raw_data = self._process_audio_files_in_folder(base_dir)
+        raw_data = self._process_audio_files_in_directory(base_dir)
         df = self._create_base_df(raw_data)
         df = self._enrich_with_eval_data(df)
         df = self._enrich_with_participant_data(df)
         return self._finalize_dataset(df)
-    
-    def _process_audio_files_in_folder(self, base_dir: Path) -> List[Dict]:
+        
+    def _process_audio_files_in_directory(self, base_dir: Path) -> List[Dict]:
         """
-        The audio files are in a folder with the following structure:
+        The audio files are in a directory with the following structure:
         - base_dir
-            - folder
-                - wav_file.wav
+            - wav_file.wav
         """
         data = []
-        for folder in base_dir.iterdir():
-            if folder.is_dir():
-                for wav_file in self._get_valid_files(folder):
-                    label = wav_file.stem.split('_')[0]
-                    features = self.feature_extractor.extract_features(file_path=wav_file, label=label)
-                    data.append(features)
+        for wav_file in self._get_valid_files(base_dir):
+            if wav_file.suffix == '.wav':
+                label = wav_file.stem.split('_')[0]
+                features = self.feature_extractor.extract_features(file_path=wav_file, label=label)
+                data.append(features)
         return data
 
     def _get_valid_files(self, folder: Path):
@@ -68,6 +66,6 @@ class VowelDatasetCreator(DatasetCreator):
         # Cleanup operations
         df = df.drop(columns=['SEX', 'DONOR', 'stimulussex', 'Participant'])
         df = df[[c for c in df.columns if 'Face' not in c and 'Video' not in c]]
-        df = df[df['file'].apply(lambda x: bool(self.file_pattern.match(x)))]
+        # df = df[df['file'].apply(lambda x: bool(self.file_pattern.match(x)))]
         df.columns = df.columns.str.lower()
         return df

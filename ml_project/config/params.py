@@ -22,35 +22,21 @@ class LoggingConfig:
 
 @dataclass
 class SentenceConfig:
-    sentences_path: Path
-    participant_info_path: Path
-    output_path: Path
+    base_dir: Path
+    eval_path: Path
+    participant_path: Path
+    output_dir: Path
     sample_rate: int = 16000  # default sample rate
-    dataset_name: str = "audio_features_librosa_dataset"
+    dataset_name: str = "sentence_features_librosa_dataset"
     experiment_name: str = "sentence-dataset-creation"
-    tracking_uri: str = "file:///Users/antonellaschiavoni/Documents/Antonella/tesis-ciencia-de-datos/mlruns"
+    mlflow_tracking_uri: str = "file:///Users/antonellaschiavoni/Documents/Antonella/tesis-ciencia-de-datos/mlruns"
     mlflow_experiment: str = "sentence-dataset-creation"
+    exclude_segments: bool = True
     features_template = {
         "f0_mean": np.nan,
-        "f0_median": np.nan,
-        "f0_std": np.nan,
-        "f0_5perc": np.nan,
-        "f0_95perc": np.nan,
         "f1_mean": np.nan,
-        "f1_median": np.nan,
-        "f1_std": np.nan,
-        "f1_5perc": np.nan,
-        "f1_95perc": np.nan,
         "f2_mean": np.nan,
-        "f2_median": np.nan,
-        "f2_std": np.nan,
-        "f2_5perc": np.nan,
-        "f2_95perc": np.nan,
         "f3_mean": np.nan,
-        "f3_median": np.nan,
-        "f3_std": np.nan,
-        "f3_5perc": np.nan,
-        "f3_95perc": np.nan,
         "intensity_mean": np.nan,
         "jitter_local": np.nan,
         "shimmer_local": np.nan
