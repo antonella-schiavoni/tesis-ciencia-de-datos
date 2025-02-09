@@ -26,3 +26,14 @@ class DataConfig:
     dataset_name: str = "audio_features_librosa_dataset"
     experiment_name: str = "dataset-creation"
     tracking_uri: str = "file:///Users/antonellaschiavoni/Documents/Antonella/tesis-ciencia-de-datos/mlruns"
+    mlflow_experiment: str = "dataset-creation"
+
+@dataclass
+class VowelConfig:
+    base_dir: Path
+    eval_path: Path
+    participant_path: Path
+    output_dir: Path
+    exclude_segments: bool = True # This config is used to exclude segments to be included in the dataset. By segments, i mean the audio segment to pronounce i, a, o.
+    mlflow_tracking_uri: str = "file:///Users/antonellaschiavoni/Documents/Antonella/tesis-ciencia-de-datos/mlruns"
+    mlflow_experiment: str = "vowel-feature-extraction"
