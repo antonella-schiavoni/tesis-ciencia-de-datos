@@ -63,6 +63,14 @@ class PraatFeatureExtractor(FeatureExtractor):
         except Exception as e:
             print(f"Intensity extraction error: {str(e)}")
 
+        # Jitter and shimmer analysis
+        try:
+            point_process = call(sound, "To PointProcess (periodic, cc)", 75, 600)
+            features["jitter_local"] = call(point_process, "Get jitter (local)", 0, 0, 0.0001, 0.02, 1.3)
+            features["shimmer_local"] = call([sound, point_process], "Get shimmer (local)", 0, 0, 0.0001, 0.02, 1.3, 1.6)
+        except Exception as e:
+            print(f"Jitter and shimmer extraction error: {str(e)}")
+
 
         return features
 
