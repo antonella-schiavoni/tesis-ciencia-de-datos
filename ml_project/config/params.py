@@ -22,7 +22,7 @@ class DataConfig:
     sentences_path: Path
     participant_info_path: Path
     output_path: Path
-    dataset_name: str = "audio-features-dataset"
-    sample_rate: int = 16000
+    sample_rate: int = 16000  # default sample rate
+    dataset_name: str = "audio_features_librosa_dataset"
     experiment_name: str = "dataset-creation"
-    tracking_uri: str = "file:///path/to/mlruns"
+    tracking_uri: str = "file:///Users/antonellaschiavoni/Documents/Antonella/tesis-ciencia-de-datos/mlruns"
