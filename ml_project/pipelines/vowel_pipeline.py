@@ -1,6 +1,6 @@
 import mlflow
 import pandas as pd
-from ml_project.components.preprocessing.praat_extractor import PraatFeatureExtractor
+from ml_project.components.preprocessing.praat_feature_extractor import PraatFeatureExtractor
 from ml_project.components.preprocessing.vowel_dataset_creator import VowelDatasetCreator
 
 from ml_project.config.params import VowelConfig
@@ -16,7 +16,8 @@ class VowelFeaturePipeline:
             config.mlflow_experiment
         )
         self.feature_extractor = PraatFeatureExtractor(
-            exclude_segments=config.exclude_segments
+            exclude_segments=config.exclude_segments,
+            features_template=config.features_template
         )
         self.dataset_creator = VowelDatasetCreator(
             feature_extractor=self.feature_extractor,

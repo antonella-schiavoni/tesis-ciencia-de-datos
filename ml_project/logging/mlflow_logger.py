@@ -41,6 +41,7 @@ class MLflowLogger(ExperimentLogger):
             mlflow.log_text(description, f"{dataset_name}-description.txt")
             mlflow.log_param("num_samples", len(dataset))
             mlflow.log_param("num_features", len(dataset.columns))
+            mlflow.log_param("features_names", dataset.columns.tolist())
             
             # Log summary statistics
             stats = dataset.describe().to_dict()

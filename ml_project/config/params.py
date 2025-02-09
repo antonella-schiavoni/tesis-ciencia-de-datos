@@ -30,14 +30,30 @@ class SentenceConfig:
     experiment_name: str = "sentence-dataset-creation"
     tracking_uri: str = "file:///Users/antonellaschiavoni/Documents/Antonella/tesis-ciencia-de-datos/mlruns"
     mlflow_experiment: str = "sentence-dataset-creation"
-    features_template: Dict = {
-        "mean_pitch": np.nan,
-        "mean_f1": np.nan,
-        "mean_f2": np.nan,
-        "mean_f3": np.nan,
-        "mean_intensity": np.nan,
-        "local_jitter": np.nan,
-        "local_shimmer": np.nan
+    features_template = {
+        "f0_mean": np.nan,
+        "f0_median": np.nan,
+        "f0_std": np.nan,
+        "f0_5perc": np.nan,
+        "f0_95perc": np.nan,
+        "f1_mean": np.nan,
+        "f1_median": np.nan,
+        "f1_std": np.nan,
+        "f1_5perc": np.nan,
+        "f1_95perc": np.nan,
+        "f2_mean": np.nan,
+        "f2_median": np.nan,
+        "f2_std": np.nan,
+        "f2_5perc": np.nan,
+        "f2_95perc": np.nan,
+        "f3_mean": np.nan,
+        "f3_median": np.nan,
+        "f3_std": np.nan,
+        "f3_5perc": np.nan,
+        "f3_95perc": np.nan,
+        "intensity_mean": np.nan,
+        "jitter_local": np.nan,
+        "shimmer_local": np.nan
     }
 
 @dataclass
@@ -49,12 +65,12 @@ class VowelConfig:
     exclude_segments: bool = True # This config is used to exclude segments to be included in the dataset. By segments, i mean the audio segment to pronounce i, a, o.
     mlflow_tracking_uri: str = "file:///Users/antonellaschiavoni/Documents/Antonella/tesis-ciencia-de-datos/mlruns"
     mlflow_experiment: str = "vowel-feature-extraction"
-    features_template: Dict = {
-            "mean_pitch": np.nan,
-            "mean_f1": np.nan,
-            "mean_f2": np.nan,
-            "mean_f3": np.nan,
-            "mean_intensity": np.nan,
-            "local_jitter": np.nan,
-            "local_shimmer": np.nan
+    features_template = {
+        "f0_mean": np.nan,
+        "f1_mean": np.nan,
+        "f2_mean": np.nan,
+        "f3_mean": np.nan,
+        "intensity_mean": np.nan,
+        "jitter_local": np.nan,
+        "shimmer_local": np.nan
         }
