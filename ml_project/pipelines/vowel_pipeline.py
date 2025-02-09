@@ -47,4 +47,5 @@ class VowelFeaturePipeline:
         self.config.output_dir.mkdir(parents=True, exist_ok=True)
         timestamp = pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")
         output_path = self.config.output_dir / f"vowel_features_{timestamp}.csv"
+        mlflow.log_param("output_path", str(output_path))
         df.to_csv(output_path, index=False)
