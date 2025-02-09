@@ -8,7 +8,7 @@ from tqdm import tqdm
 from typing import Dict, Any
 from ml_project.src.interfaces import DataPreprocessor
 
-class SentenceDatasetCreator(DataPreprocessor):
+class LibrosaFeatureExtractor(DataPreprocessor):
     """Class to create and enrich the sentence dataset"""
     def __init__(self, participant_info_path: str, sample_rate: int = 16000):
         self.sample_rate = sample_rate

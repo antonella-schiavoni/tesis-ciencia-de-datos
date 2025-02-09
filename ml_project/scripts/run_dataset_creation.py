@@ -6,16 +6,16 @@ from pathlib import Path
 from re import I
 
 from ml_project.config.params import SentenceConfig
-from ml_project.pipelines.sentence_pipeline import run_sentence_pipeline
+from ml_project.pipelines.sentence_pipeline import run_data_pipeline
 from ml_project.logging.mlflow_logger import MLflowLogger
 
-def run_sentence_dataset_creation_pipeline():
+def run_dataset_creation_pipeline():
     """
     Run the dataset creation pipeline.
     """
     # Initialize MLflow logger
     logger = MLflowLogger(
-        experiment_name="sentence_dataset_creation",
+        experiment_name="dataset_creation",
         tracking_uri="file:./mlruns"  # Using local filesystem for MLflow tracking
     )
     
@@ -23,13 +23,11 @@ def run_sentence_dataset_creation_pipeline():
         sentences_path=Path("data/processed/voices_sentences/2.Hour/"),
         participant_info_path=Path("data/raw/participant-information/DATA-GEFAV-Participant Information.csv"),
         output_path=Path(f"data/processed/datasets/audio_features_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"),
-        sample_rate=16000,
-        exclude_segments=True,
-        features_template=config.features_template
+        sample_rate=16000
     )
 
     # Pass both config and logger to the pipeline
-    dataset = run_sentence_pipeline(config, logger=logger)
+    dataset = run_data_pipeline(config, logger=logger)
 
 if __name__ == "__main__":
-    run_sentence_dataset_creation_pipeline()
+    run_dataset_creation_pipeline()

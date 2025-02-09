@@ -1,9 +1,8 @@
-from ml_project.components.preprocessing.praat_feature_extractor import PraatFeatureExtractor
-from ml_project.components.preprocessing.librosa_feature_extractor import LibrosaFeatureExtractor
+from ml_project.components.preprocessing.librosa_feature_extractor import AudioDatasetCreator
 from ml_project.logging.mlflow_logger import MLflowLogger
 from ml_project.config.params import SentenceConfig
 
-def run_sentence_pipeline(config: SentenceConfig, logger: MLflowLogger = None, praat_extractor: PraatFeatureExtractor = None):
+def run_data_pipeline(config: SentenceConfig, logger: MLflowLogger = None):
     """Run the data pipeline to create the dataset
     
     Args:
@@ -14,14 +13,11 @@ def run_sentence_pipeline(config: SentenceConfig, logger: MLflowLogger = None, p
         pd.DataFrame: The created dataset
     """
     # Create dataset
-    dataset_creator = LibrosaFeatureExtractor(
+    dataset_creator = AudioDatasetCreator(
         participant_info_path=config.participant_info_path,
         sample_rate=config.sample_rate
     )
     dataset = dataset_creator.prepare_data(config.sentences_path)
-
-    
-    praat_extractor.extract_features(config.sentences_path)
     
     # Log dataset if logger is provided
     if logger:

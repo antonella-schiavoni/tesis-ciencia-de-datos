@@ -10,17 +10,9 @@ from typing import Dict
 from ml_project.src.interfaces import FeatureExtractor
 
 class PraatFeatureExtractor(FeatureExtractor):
-    def __init__(self, exclude_segments: bool = False):
+    def __init__(self, exclude_segments: bool = False, features_template: Dict = None):
         self.exclude_segments = exclude_segments
-        self.feature_template = {
-            "mean_pitch": np.nan,
-            "mean_f1": np.nan,
-            "mean_f2": np.nan,
-            "mean_f3": np.nan,
-            "mean_intensity": np.nan,
-            "local_jitter": np.nan,
-            "local_shimmer": np.nan
-        }
+        self.feature_template = features_template
 
     def extract_features(self, file_path: Path, label: str) -> Dict:
         features = {
