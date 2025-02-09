@@ -1,4 +1,4 @@
-# ml_project/components/preprocessing/audio_dataset_creator.py
+# ml_project/components/preprocessing/sentence_dataset_creator.py
 import logging
 from pathlib import Path
 import pandas as pd
@@ -8,8 +8,8 @@ from tqdm import tqdm
 from typing import Dict, Any
 from ml_project.src.interfaces import DataPreprocessor
 
-class AudioDatasetCreator(DataPreprocessor):
-    """Class to create and enrich the audio dataset"""
+class SentenceDatasetCreator(DataPreprocessor):
+    """Class to create and enrich the sentence dataset"""
     def __init__(self, participant_info_path: str, sample_rate: int = 16000):
         self.sample_rate = sample_rate
         self.participant_info_path = participant_info_path
