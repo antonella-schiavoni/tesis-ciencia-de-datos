@@ -1,4 +1,4 @@
-from ml_project.components.preprocessing.audio_dataset_creator import AudioDatasetCreator
+from ml_project.components.preprocessing.sentence_dataset_creator import AudioDatasetCreator
 from ml_project.logging.mlflow_logger import MLflowLogger
 from ml_project.config.params import DataConfig
 
