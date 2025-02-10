@@ -22,7 +22,7 @@ def run_sentence_dataset_creation_pipeline():
         base_dir=Path("data/processed/voices_sentences/2.Hour/"),
         eval_path=Path("data/raw/evaluation/DATA_GEFAV_EVAL.CSV"),
         participant_path=Path("data/raw/participant-information/DATA-GEFAV-Participant Information.csv"),
-        output_dir=Path(f"data/processed/datasets/sentence_features_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"),
+        output_dir=Path(f"data/processed/datasets/sentence_features/sentence_features_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"),
         sample_rate=16000
     )
 

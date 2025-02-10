@@ -24,6 +24,9 @@ class PraatFeatureExtractor(FeatureExtractor):
         try:
             sound = parselmouth.Sound(str(file_path))
             features.update(self._extract_acoustic_features(sound))
+            # Check if any of the features are NaN
+            if any(isinstance(val, (float, int)) and np.isnan(val) for val in features.values()):
+                logging.warning(f"NaN values found in features for {file_path.name}")
         except Exception as e:
             logging.error(f"Error processing {file_path.name}: {str(e)}")
             

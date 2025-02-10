@@ -61,6 +61,8 @@ class VowelDatasetCreator(DatasetCreator):
 
     def _enrich_with_participant_data(self, df: pd.DataFrame) -> pd.DataFrame:
         participant_df = pd.read_csv(self.participant_path)[['Participant', 'Age', 'Sex']]
+        # Make sure participant age is numeric
+        participant_df['Age'] = pd.to_numeric(participant_df['Age'], errors='coerce')
         participant_df['sample_name'] = participant_df['Participant']
         return pd.merge(df, participant_df, on='sample_name', how='left')
 
