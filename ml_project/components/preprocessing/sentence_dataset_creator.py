@@ -48,7 +48,7 @@ class SentenceDatasetCreator(DatasetCreator):
 
     def _create_base_df(self, data: List[Dict]) -> pd.DataFrame:
         df = pd.DataFrame(data)
-        df['sample_name'] = df['file'].str.replace('_VoiceVowel.wav', '', regex=False)
+        df['sample_name'] = df['file'].str.replace('_VoiceSentence2(Hour).wav', '', regex=False)
         return df
 
     def _enrich_with_eval_data(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -59,13 +59,14 @@ class SentenceDatasetCreator(DatasetCreator):
 
     def _enrich_with_participant_data(self, df: pd.DataFrame) -> pd.DataFrame:
         participant_df = pd.read_csv(self.participant_path)[['Participant', 'Age', 'Sex']]
-        participant_df['sample_name'] = participant_df['Participant']
-        return pd.merge(df, participant_df, on='sample_name', how='left')
+        # Make sure participant age is numeric
+        participant_df['Age'] = pd.to_numeric(participant_df['Age'], errors='coerce')
+        participant_df['label'] = participant_df['Participant']
+        return pd.merge(df, participant_df, on='label', how='left')
 
     def _finalize_dataset(self, df: pd.DataFrame) -> pd.DataFrame:
         # Cleanup operations
         df = df.drop(columns=['SEX', 'DONOR', 'stimulussex', 'Participant'])
         df = df[[c for c in df.columns if 'Face' not in c and 'Video' not in c]]
-        # df = df[df['file'].apply(lambda x: bool(self.file_pattern.match(x)))]
         df.columns = df.columns.str.lower()
         return df
